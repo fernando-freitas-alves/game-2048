@@ -1,0 +1,31 @@
+[tool.black]
+line-length = 120
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.mypy_cache
+  | \.venv
+)/
+'''
+
+[tool.isort]
+profile = "black"
+
+[tool.mypy]
+follow_imports = "skip"
+ignore_missing_imports = true
+pretty = true
+show_error_codes = true
+show_error_context = true
+warn_redundant_casts = true
+exclude = [".venv/*", "tests"]
+
+[tool.bandit]
+exclude_dirs = [".venv", "tests"]
+
+[tool.flake8]
+max_line_length = 120
+exclude = [".venv"]
+per_file_ignores = ["**/__init__.py:F401,F403"]
+extend_ignore = ["E701", "E731", "E203"]
