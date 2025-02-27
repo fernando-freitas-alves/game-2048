@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { login } from '../clients/loginClient';
 import { useNavigate } from 'react-router';
+import { login } from '../clients/authClient';
+import { storeUserData } from '../utils/sessionUtils';
 import './Login.css';
 
 const Login: React.FC = () => {
@@ -11,16 +12,11 @@ const Login: React.FC = () => {
 
   const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
-    const response = await login(username, password);
-    if (response.ok) {
-      const data = await response.json();
-      // Store user details and token in session storage
-      sessionStorage.setItem('user', JSON.stringify(data.user));
-      sessionStorage.setItem('token', data.token);
-      // Redirect to the game screen on successful login
+    try {
+      const data = await login(username, password);
+      storeUserData(data);
       navigate('/game');
-    } else {
-      // Handle login failure
+    } catch (error) {
       alert('Login failed. Please check your credentials and try again.');
     }
   };

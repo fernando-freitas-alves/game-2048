@@ -1,6 +1,6 @@
 from typing import Literal, NotRequired, TypedDict
 
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import (
@@ -14,7 +14,7 @@ from .engine.game_engine import GameEngine
 from .models import GameState as GameStateModel
 
 
-def get_or_create_latest_game_state(user: User) -> GameStateModel:
+def get_or_create_latest_game_state(user: AbstractUser) -> GameStateModel:
     game_state = GameStateModel.objects.filter(user=user).order_by("-created_at").first()
     if not game_state:
         game = GameEngine()
