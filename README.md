@@ -1,5 +1,9 @@
 # 2048 Game
 
+<p align="center">
+  <img width="562" alt="image" src="https://github.com/user-attachments/assets/26faac9a-72e6-4b28-b362-15a556a4b78c" />
+</p>
+
 ## Overview
 
 This is a Python implementation of the classic 2048 game using Pygame. The game features:
