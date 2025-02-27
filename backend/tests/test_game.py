@@ -1,31 +1,13 @@
 import unittest
-from unittest.mock import mock_open, patch
+from unittest.mock import Mock, patch
 
-from game_2048.game import Game
-from game_2048.score import Score
+from game.engine.game_engine import GameEngine
 
 
 class TestGame(unittest.TestCase):
-    @patch("game_2048.score.os.path.exists")
-    @patch("game_2048.score.os.rename")
-    @patch("game_2048.score.os.remove")
-    @patch("builtins.open", new_callable=mock_open, read_data="0")
-    def setUp(self, mock_file, mock_remove, mock_rename, mock_exists):
-        """Set up a new Game and Score instance for each test."""
-        # Mock os.path.exists to simulate the absence of best_score.txt
-        mock_exists.return_value = False
-        self.game = Game()
-        self.score = Score()
-
-    @patch("game_2048.score.os.path.exists")
-    @patch("game_2048.score.os.rename")
-    @patch("game_2048.score.os.remove")
-    @patch("builtins.open", new_callable=mock_open, read_data="0")
-    def tearDown(self, mock_file, mock_remove, mock_rename, mock_exists):
-        """Tear down after each test."""
-        # Ensure that os.remove and os.rename are not called during teardown
-        mock_remove.assert_not_called()
-        mock_rename.assert_not_called()
+    def setUp(self):
+        """Set up a new GameEngine instance for each test."""
+        self.game = GameEngine()
 
     def test_initial_board(self):
         """Test that the board is initialized correctly with two tiles."""
@@ -36,8 +18,8 @@ class TestGame(unittest.TestCase):
             "Initial board should have exactly two tiles.",
         )
 
-    @patch("game_2048.game.Game.add_random_tile")
-    def test_move_up(self, mock_add_random_tile):
+    @patch("game.engine.game_engine.GameEngine.add_random_tile")
+    def test_move_up(self, mock_add_random_tile: Mock):
         """Test that moving up merges tiles correctly."""
         # Set up a specific board state
         self.game.board = [
@@ -60,8 +42,8 @@ class TestGame(unittest.TestCase):
             "Tiles should merge correctly when moving up.",
         )
 
-    @patch("game_2048.game.Game.add_random_tile")
-    def test_move_down(self, mock_add_random_tile):
+    @patch("game.engine.game_engine.GameEngine.add_random_tile")
+    def test_move_down(self, mock_add_random_tile: Mock):
         """Test that moving down merges tiles correctly."""
         # Set up a specific board state
         self.game.board = [
@@ -84,8 +66,8 @@ class TestGame(unittest.TestCase):
             "Tiles should merge correctly when moving down.",
         )
 
-    @patch("game_2048.game.Game.add_random_tile")
-    def test_move_left(self, mock_add_random_tile):
+    @patch("game.engine.game_engine.GameEngine.add_random_tile")
+    def test_move_left(self, mock_add_random_tile: Mock):
         """Test that moving left merges tiles correctly."""
         # Set up a specific board state
         self.game.board = [
@@ -108,8 +90,8 @@ class TestGame(unittest.TestCase):
             "Tiles should merge correctly when moving left.",
         )
 
-    @patch("game_2048.game.Game.add_random_tile")
-    def test_move_right(self, mock_add_random_tile):
+    @patch("game.engine.game_engine.GameEngine.add_random_tile")
+    def test_move_right(self, mock_add_random_tile: Mock):
         """Test that moving right merges tiles correctly."""
         # Set up a specific board state
         self.game.board = [
@@ -133,7 +115,7 @@ class TestGame(unittest.TestCase):
         )
 
     @patch("random.choice")
-    def test_add_random_tile(self, mock_random_choice):
+    def test_add_random_tile(self, mock_random_choice: Mock):
         """Test that a new tile is added after a successful move."""
         # Mock random.choice to control where and what tile is added
         # First call: choose position (1, 1)
@@ -170,29 +152,12 @@ class TestGame(unittest.TestCase):
         else:
             self.fail("Move did not result in a change, cannot test tile addition.")
 
-    @patch("game_2048.score.os.path.exists")
-    @patch("game_2048.score.os.rename")
-    @patch("game_2048.score.os.remove")
-    @patch("builtins.open", new_callable=mock_open, read_data="100")
-    def test_reset_game(self, mock_file, mock_remove, mock_rename, mock_exists):
+    def test_reset_game(self):
         """Test resetting the game."""
-        # Test resetting the game
-        self.score.update_score(100)
         self.game.reset()
-        self.score.reset_score()
-        self.assertEqual(
-            self.score.get_current_score(),
-            0,
-            "Current score should be reset to 0.",
-        )
         non_zero_tiles = sum(cell != 0 for row in self.game.board for cell in row)
         self.assertEqual(
             non_zero_tiles,
             2,
             "After reset, the board should have exactly two tiles.",
         )
-
-
-if __name__ == "__main__":
-    unittest.main()
-    unittest.main()

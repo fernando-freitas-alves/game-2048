@@ -1,4 +1,3 @@
-# A framework for managing and maintaining multi-language pre-commit hooks
 repos:
   - repo: local
     hooks:
@@ -7,7 +6,7 @@ repos:
         types: [python]
         require_serial: true
         language: script
-        entry: .venv/bin/python -m autoflake -r --in-place --remove-unused-variables
+        entry: backend/.venv/bin/python -m autoflake -r --in-place --remove-unused-variables
 
   - repo: local
     hooks:
@@ -16,7 +15,7 @@ repos:
         types: [python]
         require_serial: true
         language: script
-        entry: .venv/bin/python -m autoflake -r --in-place --remove-all-unused-imports --exclude=__init__.py
+        entry: backend/.venv/bin/python -m autoflake -r --in-place --remove-all-unused-imports --exclude=__init__.py
 
   - repo: local
     hooks:
@@ -25,7 +24,7 @@ repos:
         types: [python]
         require_serial: true
         language: script
-        entry: .venv/bin/python -m bandit -r
+        entry: backend/.venv/bin/python -m bandit --recursive --configfile backend/pyproject.toml
         exclude: tests
 
   - repo: local
@@ -35,7 +34,7 @@ repos:
         types: [python]
         require_serial: true
         language: script
-        entry: .venv/bin/python -m black
+        entry: backend/.venv/bin/python -m black --config backend/pyproject.toml
 
   - repo: local
     hooks:
@@ -44,7 +43,7 @@ repos:
         types: [python]
         require_serial: true
         language: script
-        entry: .venv/bin/python -m flake8
+        entry: backend/.venv/bin/python -m flake8 --toml-config backend/pyproject.toml
 
   - repo: local
     hooks:
@@ -53,7 +52,7 @@ repos:
         types: [python]
         require_serial: true
         language: script
-        entry: .venv/bin/python -m isort
+        entry: backend/.venv/bin/python -m isort --settings-path backend/pyproject.toml
 
   - repo: local
     hooks:
@@ -62,63 +61,22 @@ repos:
         types: [python]
         require_serial: true
         language: script
-        entry: .venv/bin/python -m mypy
+        entry: backend/.venv/bin/python -m mypy --config-file backend/pyproject.toml
         exclude: tests
 
-  - repo: https://github.com/pre-commit/pre-commit-hooks # Some out-of-the-box hooks for pre-commit
-    rev: "v4.3.0"
+  - repo: local
     hooks:
-      # - id: check-added-large-files # Prevent giant files from being committed
-      # - id: check-ast # Simply check whether the files parse as valid python
-      # # - id: check-byte-order-marker # forbid files which have a UTF-8 byte-order marker
-      # - id: check-builtin-literals # Require literal syntax when initializing empty or zero Python builtin types
-      # - id: check-case-conflict # Check for files that would conflict in case-insensitive filesystems
-      # - id: check-docstring-first # Checks a common error of defining a docstring after code
-      # - id: check-executables-have-shebangs # Ensures that (non-binary) executables have a shebang
-      # - id: check-json # This hook checks json files for parseable syntax
-      # - id: check-shebang-scripts-are-executable # Ensures that (non-binary) files with a shebang are executable
-      # - id: pretty-format-json # This hook sets a standard for formatting JSON files
-      # - id: check-merge-conflict # Check for files that contain merge conflict strings
-      # - id: check-symlinks # Checks for symlinks which do not point to anything
-      # - id: check-toml # This hook checks toml files for parseable syntax
-      # - id: check-vcs-permalinks # Ensures that links to vcs websites are permalinks
-      # - id: check-xml # This hook checks xml files for parseable syntax
+      - id: prettier
+        name: prettier
+        files: ^frontend/.*\.(js|jsx|ts|tsx|css|html)$
+        require_serial: true
+        language: script
+        entry: ./frontend/lint.sh
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks # Some out-of-the-box hooks for pre-commit
+    rev: "v5.0.0"
+    hooks:
       - id: check-yaml # This hook checks yaml files for parseable syntax
-      # - id: debug-statements # Check for debugger imports and py37+ `breakpoint()` calls in python source
-      # - id: destroyed-symlinks # Detects symlinks which are changed to regular files with a content of a path which that symlink was pointing to
-      # - id: detect-aws-credentials # Detects *your* aws credentials from the aws cli credentials file
-      # - id: detect-private-key # Detects the presence of private keys
-      # # - id: double-quote-string-fixer # This hook replaces double quoted strings with single quoted strings
       - id: end-of-file-fixer # Ensures that a file is either empty, or ends with one newline
         exclude: requirements*.txt
-      # # - id: file-contents-sorter # Sort the lines in specified files (defaults to alphabetical). You must provide list of target files as input in your .pre-commit-config.yaml file
-      # - id: fix-byte-order-marker # removes UTF-8 byte order marker
-      # # - id: fix-encoding-pragma # Add # -*- coding: utf-8 -*- to the top of python files
-      # # - id: forbid-new-submodules # Prevent addition of new git submodules
-      # - id: mixed-line-ending # Replaces or checks mixed line ending
-      # - id: name-tests-test # This verifies that test files are named correctly
-      # - id: no-commit-to-branch # Don't commit to branch
-      # # - id: requirements-txt-fixer # Sorts entries in requirements.txt
-      # - id: sort-simple-yaml # Sorts simple YAML files which consist only of top-level keys, preserving comments and blocks
       - id: trailing-whitespace # This hook trims trailing whitespace
-
-
-  # - repo: https://github.com/PyCQA/pydocstyle # A static analysis tool for checking compliance with Python docstring conventions
-  #   rev: "6.1.1"
-  #   hooks:
-  #     - id: pydocstyle
-
-  # - repo: https://github.com/pre-commit/pygrep-hooks # A collection of fast, cheap, regex based pre-commit hooks
-  #   rev: "v1.9.0"
-  #   hooks:
-  #     - id: python-check-blanket-noqa # Enforce that `noqa` annotations always occur with specific codes. Sample annotations: `# noqa: F401`, `# noqa: F401,W203`
-  #     - id: python-check-blanket-type-ignore # Enforce that `# type: ignore` annotations always occur with specific codes. Sample annotations: `# type: ignore[attr-defined]`, `# type: ignore[attr-defined, name-defined]`
-  #     - id: python-check-mock-methods # Prevent common mistakes of `assert mck.not_called()`, `assert mck.called_once_with(...)` and `mck.assert_called`.
-  #     - id: python-no-eval # A quick check for the `eval()` built-in function
-  #     - id: python-no-log-warn # A quick check for the deprecated `.warn()` method of python loggers
-  #     - id: python-use-type-annotations # Enforce that python3.6+ type annotations are used instead of type comments
-
-  # - repo: https://github.com/jendrikseipp/vulture # Find dead Python code
-  #   rev: "v2.3"
-  #   hooks:
-  #     - id: vulture

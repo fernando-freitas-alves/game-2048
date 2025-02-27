@@ -1,0 +1,4 @@
+export const DEBOUNCE_DELAY_MILLISECONDS = parseInt(
+  process.env.REACT_APP_DEBOUNCE_DELAY_MILLISECONDS || '150',
+  10
+);

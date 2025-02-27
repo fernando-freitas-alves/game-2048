@@ -1,4 +1,7 @@
 {
+  "[css]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
   "[python]": {
     "editor.codeActionsOnSave": {
       "source.organizeImports": "explicit"
@@ -12,34 +15,56 @@
     "editor.wordWrapColumn": 120,
     "editor.wrappingIndent": "same"
   },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "always"
+    }
+  },
+  "[typescript]": {
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "always"
+    }
+  },
+  "[javascript]": {
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "always"
+    }
+  },
+  "[javascriptreact]": {
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "always"
+    }
+  },
   "bandit.args": [
     "--configfilec",
-    "pyproject.toml"
+    "backend/pyproject.toml"
   ],
   "black-formatter.args": [
     "--config",
-    "pyproject.toml"
+    "backend/pyproject.toml"
   ],
   "cSpell.words": [
     "odin",
     "streamlit"
   ],
+  "editor.formatOnSave": true,
   "flake8.args": [
-    "--config-file=pyproject.toml",
+    "--toml-config=backend/pyproject.toml",
     "--max-line-length=120"
   ],
   "isort.args": [
     "--settings-path",
-    "pyproject.toml"
+    "backend/pyproject.toml"
   ],
   "mypy-type-checker.args": [
     "--config-file",
-    "pyproject.toml"
+    "backend/pyproject.toml"
   ],
-  "mypy.configFile": "pyproject.toml",
+  "mypy.configFile": "backend/pyproject.toml",
   "mypy.runUsingActiveInterpreter": true,
   "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
-  "python.envFile": "${workspaceFolder}/.env",
+  "python.envFile": "${workspaceFolder}/backend/.env",
   "python.testing.pytestArgs": [
     "tests"
   ],

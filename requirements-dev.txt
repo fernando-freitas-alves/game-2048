@@ -1,12 +1,1 @@
--r requirements.txt
-autoflake~=2.3.1              # Removes unused imports and unused variables as reported by pyflakes
-bandit~=1.8.3                 # A tool for finding common security issues in Python code
-black~=25.1.0                 # The uncompromising Python code formatter
-debugpy~=1.8.12               # An implementation of the Debug Adapter Protocol for Python
-factory-boy~=3.3.3            # A versatile test fixtures replacement based on thoughtbot's factory_bot for Ruby
-flake8~=7.1.2                 # A command-line utility for enforcing style consistency across Python projects
-    flake8-pyproject~=1.2.3   # Plugin for Flake8 that reads configuration from pyproject.toml
-    pyflakes~=3.2.0           # A simple program which checks Python source files for errors
-isort~=6.0.1                  # A Python utility/library to sort imports
-mypy~=1.15.0                  # Optional static typing for Python 3 and 2 (PEP 484)
-pre-commit~=4.1.0             # A framework for managing and maintaining multi-language pre-commit hooks
+pre-commit~=4.1.0   # A framework for managing and maintaining multi-language pre-commit hooks

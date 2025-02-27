@@ -1,0 +1,85 @@
+.board-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.board {
+  display: grid;
+  gap: 10px;
+  background-color: #bbada0;
+  border-radius: 10px;
+  padding: 10px;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.board-row {
+  display: contents;
+}
+
+.board-cell {
+  width: 100px;
+  height: 100px;
+  background-color: #cdc1b4;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: #776e65;
+  transition: transform 0.5s ease-in-out;
+}
+
+.board-cell.value-2 {
+  background-color: #eee4da;
+}
+
+.board-cell.value-4 {
+  background-color: #ede0c8;
+}
+
+.board-cell.value-8 {
+  background-color: #f2b179;
+  color: #f9f6f2;
+}
+
+.board-cell.value-16 {
+  background-color: #f59563;
+  color: #f9f6f2;
+}
+
+.board-cell.value-32 {
+  background-color: #f67c5f;
+  color: #f9f6f2;
+}
+
+.board-cell.value-64 {
+  background-color: #f65e3b;
+  color: #f9f6f2;
+}
+
+.board-cell.value-128 {
+  background-color: #edcf72;
+  color: #f9f6f2;
+}
+
+.board-cell.value-256 {
+  background-color: #edcc61;
+  color: #f9f6f2;
+}
+
+.board-cell.value-512 {
+  background-color: #edc850;
+  color: #f9f6f2;
+}
+
+.board-cell.value-1024 {
+  background-color: #edc53f;
+  color: #f9f6f2;
+}
+
+.board-cell.value-2048 {
+  background-color: #edc22e;
+  color: #f9f6f2;
+}

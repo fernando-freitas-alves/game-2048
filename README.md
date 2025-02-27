@@ -1,23 +1,26 @@
 # 2048 Game
 
+<!-- markdownlint-disable MD033 -->
 <p align="center">
-  <img width="562" alt="image" src="https://github.com/user-attachments/assets/26faac9a-72e6-4b28-b362-15a556a4b78c" />
+  <img width="582" alt="image" src="https://github.com/user-attachments/assets/81570416-daa1-49d9-ae68-555f4ebc0eaf" />
 </p>
 
 ## Overview
 
-This is a Python implementation of the classic 2048 game using Pygame. The game features:
+This project is a full-stack implementation of the classic 2048 game using Django for the backend and React for the
+frontend. The game features:
 
 - **Interactive user interface**
 - **Score tracking with best score preservation**
 - **Game over detection and reset functionality**
+- **Server-side game storage with login for accessing previous games**
 
 ## Installation
 
 ### Prerequisites
 
-- **Python 3.x**
-- **Pygame library**
+- **Python 3.12**
+- **Node.js 16+ and npm**
 
 ### Setup
 
@@ -29,24 +32,31 @@ make setup
 
 This will:
 
-1. Create a Python virtual environment named `venv`.
-2. Activate the virtual environment.
-3. Install the required dependencies from `requirements.txt`.
+1. Create a Python virtual environment named `.venv` in the `backend` folder and install the required dependencies from
+   `requirements-dev.txt`.
+2. Install the required Node.js packages in the `frontend` folder.
 
 ## How to Run
 
-Use the `Makefile` to run the game:
+### Backend
+
+Use the `Makefile` to run the game server:
 
 ```bash
-make run
+make run-backend
 ```
 
-This will:
+### Frontend
 
-1. Activate the Python virtual environment.
-2. Start the game by running `game_2048/main.py`.
+Use the `Makefile` to run the game client:
+
+```bash
+make run-frontend
+```
 
 ## How to Test
+
+### Backend Tests
 
 Use the `Makefile` to run unit tests:
 
@@ -54,58 +64,51 @@ Use the `Makefile` to run unit tests:
 make test
 ```
 
-This will:
+## Additional Makefile Commands
 
-1. Activate the Python virtual environment.
-2. Execute all unit tests located in the `tests/` directory to ensure that the game's core functionalities work as expected.
+### Create Superuser
 
-## Makefile
+Use the `Makefile` to create a superuser for the backend:
 
-The `Makefile` provides convenient targets to manage the project:
+```bash
+make create-superuser
+```
 
-- **setup**: Create a virtual environment and install dependencies.
+### Migrations
 
-  ```bash
-  make setup
-  ```
+Use the `Makefile` to make and apply database migrations:
 
-- **run**: Activate the virtual environment and run the game.
+```bash
+make migrations
+```
 
-  ```bash
-  make run
-  ```
+### Lint
 
-- **test**: Activate the virtual environment and run unit tests.
+Use the `Makefile` to run all linters via pre-commit:
 
-  ```bash
-  make test
-  ```
+```bash
+make lint
+```
 
-- **help**: Display available Makefile targets.
+### Help
 
-  ```bash
-  make help
-  ```
+Use the `Makefile` to show the help message with available targets:
+
+```bash
+make help
+```
 
 ## Project Structure
 
-- `game_2048/`: Contains the main game code.
-  - `main.py`: Entry point of the application.
-  - `game.py`: Handles game logic.
-  - `score.py`: Manages scoring.
-  - `ui.py`: Manages the user interface.
-- `resources/`: Contains additional resources and documentation.
-- `tests/`: Contains unit tests for the game.
-  - `test_score.py`: Tests for the `Score` class.
-  - `test_game.py`: Tests for the `Game` class.
-- `docs/`: Documentation related files.
-- `Makefile`: Automation scripts for setup, running, and testing the project.
-- `README.md`: Project documentation and instructions.
+- `backend/`: Contains the Django backend code.
+  - `authentication/`: Handles user authentication.
+  - `game/`: Contains game logic and models.
+  - `main/`: Main application settings and URLs.
+- `frontend/`: Contains the React frontend code.
+  - `src/`: Source code for React components and utilities.
+- `tests/`: Contains unit tests for the backend.
+- `Makefile`: Automation scripts for setup, running, and testing the backend.
 
 ## Contributing
 
 Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes.
-
-## License
-
-This project is licensed under the MIT License.
