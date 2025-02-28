@@ -14,14 +14,6 @@ from .engine.game_engine import GameEngine
 from .models import GameState as GameStateModel
 
 
-def get_or_create_latest_game_state(user: AbstractUser) -> GameStateModel:
-    game_state = GameStateModel.objects.filter(user=user).order_by("-created_at").first()
-    if not game_state:
-        game = GameEngine()
-        game_state = GameStateModel.objects.create(user=user, board=game.board, score=game.score)
-    return game_state
-
-
 class GameState(TypedDict):
     board: list[list[int]]
     score: int
@@ -40,6 +32,14 @@ class UserMoveResponse(TypedDict):
     status: Literal["success", "failed"]
     message: NotRequired[str]
     game_state: GameState
+
+
+def get_or_create_latest_game_state(user: AbstractUser) -> GameStateModel:
+    game_state = GameStateModel.objects.filter(user=user).order_by("-created_at").first()
+    if not game_state:
+        game = GameEngine()
+        game_state = GameStateModel.objects.create(user=user, board=game.board, score=game.score)
+    return game_state
 
 
 @api_view(["POST"])

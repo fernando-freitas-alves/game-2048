@@ -16,20 +16,11 @@ from rest_framework.decorators import (
 )
 from rest_framework.permissions import IsAuthenticated
 
+from .serializers import UserLoginRequestSerializer, UserSignupRequestSerializer
+
 
 class UserData(TypedDict):
     username: str
-    email: str
-
-
-class UserLoginRequest(TypedDict):
-    username: str
-    password: str
-
-
-class UserSignupRequest(TypedDict):
-    username: str
-    password: str
     email: str
 
 
@@ -46,10 +37,9 @@ class BadRequestResponse(TypedDict):
 @csrf_exempt
 @require_POST
 def login(request: HttpRequest) -> HttpResponse:
-    data: UserLoginRequest = json.loads(request.body)
-    username = data["username"]
-    password = data["password"]
-    if not username or not password:
+    data = json.loads(request.body)
+    serializer = UserLoginRequestSerializer(data=data)
+    if not serializer.is_valid():
         return JsonResponse(
             BadRequestResponse(
                 error="missing_credentials",
@@ -57,6 +47,8 @@ def login(request: HttpRequest) -> HttpResponse:
             ),
             status=400,
         )
+    username = serializer.validated_data["username"]
+    password = serializer.validated_data["password"]
     user = authenticate(request, username=username, password=password)
     if user is not None:
         auth_login(request, user)
@@ -83,11 +75,9 @@ def login(request: HttpRequest) -> HttpResponse:
 @csrf_exempt
 @require_POST
 def signup(request: HttpRequest) -> HttpResponse:
-    data: UserSignupRequest = json.loads(request.body)
-    username = data["username"]
-    password = data["password"]
-    email = data["email"]
-    if not username or not password or not email:
+    data = json.loads(request.body)
+    serializer = UserSignupRequestSerializer(data=data)
+    if not serializer.is_valid():
         return JsonResponse(
             BadRequestResponse(
                 error="missing_credentials",
@@ -95,6 +85,9 @@ def signup(request: HttpRequest) -> HttpResponse:
             ),
             status=400,
         )
+    username = serializer.validated_data["username"]
+    password = serializer.validated_data["password"]
+    email = serializer.validated_data["email"]
     User = get_user_model()
     if User.objects.filter(username=username).exists():
         return JsonResponse(
