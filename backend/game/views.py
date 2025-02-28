@@ -62,30 +62,23 @@ def start_new_game(request: HttpRequest) -> HttpResponse:
 @api_view(["GET"])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
-def get_game_state(request: HttpRequest) -> HttpResponse:
-    if request.method == "GET":
-        game_state = get_or_create_latest_game_state(request.user)
-        return JsonResponse(
-            GameStateResponse(
-                game_state=GameState(
-                    board=game_state.board,
-                    score=game_state.score,
-                    over=game_state.over,
-                )
+def fetch_game_state(request: HttpRequest) -> HttpResponse:
+    game_state = get_or_create_latest_game_state(request.user)
+    return JsonResponse(
+        GameStateResponse(
+            game_state=GameState(
+                board=game_state.board,
+                score=game_state.score,
+                over=game_state.over,
             )
         )
-    return JsonResponse(
-        {
-            "error": "Invalid request",
-        },
-        status=400,
     )
 
 
 @api_view(["POST"])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
-def user_move(request: HttpRequest) -> HttpResponse:
+def make_move(request: HttpRequest) -> HttpResponse:
     move = request.GET.get("direction")
     game_state = get_or_create_latest_game_state(request.user)
 

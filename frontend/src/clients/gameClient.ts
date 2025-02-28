@@ -1,34 +1,38 @@
-import { API_BASE_URL } from './contants';
-import { getAuthHeaders } from './utils';
+import { z } from 'zod';
+import { API_BASE_URL } from '../settings';
+import { getAuthHeaders, handleResponse } from './utils';
 
-export interface GameState {
-  board: number[][];
-  score: number;
-  over: boolean;
-}
+export const GameStateSchema = z.object({
+  board: z.array(z.array(z.number())),
+  score: z.number(),
+  over: z.boolean(),
+});
 
-export interface FetchGameStateResponse {
-  game_state: GameState;
-}
+export const StartNewGameResponseSchema = z.object({
+  game_state: GameStateSchema,
+});
 
-export interface MakeMoveResponse {
-  status: 'success' | 'failed';
-  message?: string;
-  game_state: GameState;
-}
+export const GameStateResponseSchema = z.object({
+  game_state: GameStateSchema,
+});
 
-export interface StartNewGameResponse {
-  game_state: GameState;
-}
+export const MakeMoveResponseSchema = z.object({
+  status: z.enum(['success', 'failed']),
+  message: z.string().optional(),
+  game_state: GameStateSchema,
+});
 
-const handleResponse = async (response: Response): Promise<any> => {
-  if (!response.ok) {
-    throw new Error('Failed to fetch data');
-  }
-  return response.json();
+export const startNewGame = async () => {
+  const response = await fetch(`${API_BASE_URL}/game/new/`, {
+    method: 'POST',
+    headers: {
+      ...getAuthHeaders(),
+    },
+  });
+  return handleResponse(response, StartNewGameResponseSchema);
 };
 
-export const fetchGameState = async (): Promise<FetchGameStateResponse> => {
+export const fetchGameState = async () => {
   const response = await fetch(`${API_BASE_URL}/game/state/`, {
     method: 'GET',
     headers: {
@@ -36,25 +40,15 @@ export const fetchGameState = async (): Promise<FetchGameStateResponse> => {
       ...getAuthHeaders(),
     },
   });
-  return handleResponse(response);
+  return handleResponse(response, GameStateResponseSchema);
 };
 
-export const makeMove = async (move: string): Promise<MakeMoveResponse> => {
+export const makeMove = async (move: string) => {
   const response = await fetch(`${API_BASE_URL}/game/move/?direction=${move}`, {
     method: 'POST',
     headers: {
       ...getAuthHeaders(),
     },
   });
-  return handleResponse(response);
-};
-
-export const startNewGame = async (): Promise<StartNewGameResponse> => {
-  const response = await fetch(`${API_BASE_URL}/game/start/`, {
-    method: 'POST',
-    headers: {
-      ...getAuthHeaders(),
-    },
-  });
-  return handleResponse(response);
+  return handleResponse(response, MakeMoveResponseSchema);
 };

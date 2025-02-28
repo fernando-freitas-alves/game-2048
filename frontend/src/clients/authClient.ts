@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { API_BASE_URL } from './contants';
-import { getAuthHeaders } from './utils';
+import { API_BASE_URL } from '../settings';
+import { getAuthHeaders, handleResponse } from './utils';
 
 export const AuthResponseSchema = z.object({
   user: z.object({
@@ -9,6 +9,25 @@ export const AuthResponseSchema = z.object({
   }),
   token: z.string(),
 });
+
+export const signup = async (
+  username: string,
+  password: string,
+  email: string
+) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/auth/signup/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ username, password, email }),
+    });
+    return handleResponse(response, AuthResponseSchema);
+  } catch (error) {
+    throw new Error('Error during sign up');
+  }
+};
 
 export const login = async (username: string, password: string) => {
   try {
@@ -19,10 +38,7 @@ export const login = async (username: string, password: string) => {
       },
       body: JSON.stringify({ username, password }),
     });
-
-    const json = await response.json();
-    const data = AuthResponseSchema.parse(json);
-    return data;
+    return handleResponse(response, AuthResponseSchema);
   } catch (error) {
     throw new Error('Error during login');
   }
@@ -38,25 +54,4 @@ export const logout = async () => {
       },
     });
   } catch (error) {}
-};
-
-export const signup = async (
-  username: string,
-  password: string,
-  email: string
-) => {
-  try {
-    const response = await fetch(`${API_BASE_URL}/auth/signup/`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ username, password, email }),
-    });
-    const json = await response.json();
-    const data = AuthResponseSchema.parse(json);
-    return data;
-  } catch (error) {
-    throw new Error('Error during sign up');
-  }
 };

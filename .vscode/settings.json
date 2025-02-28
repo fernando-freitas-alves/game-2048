@@ -64,7 +64,6 @@
   "mypy.configFile": "backend/pyproject.toml",
   "mypy.runUsingActiveInterpreter": true,
   "python.defaultInterpreterPath": "${workspaceFolder}/backend/.venv/bin/python",
-  "python.envFile": "${workspaceFolder}/backend/.env",
   "python.testing.pytestArgs": [
     "tests"
   ],
